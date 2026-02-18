@@ -1,0 +1,1487 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0a8fdd">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>AF Clean - Sistema de Gestão</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --primary: #0a8fdd;
+            --primary-light: #4fc3f7;
+            --secondary: #ffd54f;
+            --success: #4caf50;
+            --danger: #f44336;
+            --glass: rgba(255, 255, 255, 0.95);
+            --shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #e0f7ff 0%, #b3e5fc 50%, #81d4fa 100%);
+            min-height: 100vh;
+            padding-bottom: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 15px;
+        }
+
+        .header {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #e0f7ff, #4fc3f7);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary);
+            flex-shrink: 0;
+        }
+
+        .header-text h1 {
+            color: var(--primary);
+            font-size: 22px;
+            text-transform: uppercase;
+        }
+
+        .header-text h1 span {
+            color: var(--secondary);
+        }
+
+        .menu {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+        }
+
+        .menu-btn {
+            background: var(--glass);
+            border: none;
+            padding: 12px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #555;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .menu-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .card {
+            background: var(--glass);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: var(--shadow);
+        }
+
+        .card h2 {
+            color: var(--primary);
+            font-size: 18px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .stat-box {
+            background: var(--glass);
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .stat-box i {
+            font-size: 24px;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .stat-box h3 {
+            font-size: 28px;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: inherit;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .btn-success { background: var(--success); }
+        .btn-danger { background: var(--danger); }
+        .btn-secondary { background: #666; }
+        .btn-small { padding: 8px 12px; font-size: 13px; width: auto; }
+
+        .client-item {
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .client-item h3 {
+            color: var(--primary);
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .client-item p {
+            color: #666;
+            font-size: 13px;
+            margin: 3px 0;
+        }
+
+        .client-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .badge-pending { background: #fff3cd; color: #856404; }
+        .badge-progress { background: #cce5ff; color: #004085; }
+        .badge-completed { background: #d4edda; color: #155724; }
+
+        /* CÂMERA - ÁREA DE FOTO */
+        .photo-section {
+            margin: 15px 0;
+        }
+
+        .camera-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .camera-btn {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            border: none;
+            padding: 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+
+        .camera-btn:active {
+            transform: scale(0.98);
+        }
+
+        .camera-btn i {
+            font-size: 32px;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .camera-btn span {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .photo-preview {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .photo-item {
+            position: relative;
+            aspect-ratio: 1;
+        }
+
+        .photo-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .photo-item .remove-btn {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--danger);
+            color: white;
+            border: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Preview da câmera em tempo real */
+        .camera-preview {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto 15px;
+            display: none;
+        }
+
+        .camera-preview video {
+            width: 100%;
+            border-radius: 12px;
+            display: block;
+        }
+
+        .camera-preview canvas {
+            display: none;
+        }
+
+        .camera-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .payment-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .payment-option {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .payment-option.selected {
+            border-color: var(--primary);
+            background: rgba(10, 143, 221, 0.1);
+        }
+
+        .payment-option i {
+            font-size: 24px;
+            color: var(--primary);
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .signature-box {
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            margin: 15px 0;
+            position: relative;
+            touch-action: none;
+        }
+
+        #signatureCanvas {
+            width: 100%;
+            height: 200px;
+            display: block;
+            touch-action: none;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 500px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .section { display: none; }
+        .section.active { display: block; animation: fadeIn 0.3s; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .empty {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #333;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 50px;
+            z-index: 2000;
+            opacity: 0;
+            transition: all 0.3s;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        .reminder-alert {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
+            color: white;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+
+        .whatsapp-btn {
+            background: #25d366;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 13px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 480px) {
+            .form-row { grid-template-columns: 1fr; }
+            .camera-options { grid-template-columns: 1fr; }
+            .photo-preview { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">AF</div>
+            <div class="header-text">
+                <h1>AF <span>Clean</span></h1>
+                <p>Higienização de estofados</p>
+            </div>
+        </div>
+
+        <!-- Menu -->
+        <div class="menu">
+            <button class="menu-btn active" onclick="showSection('dashboard')">
+                <i class="fas fa-home"></i> <span>Início</span>
+            </button>
+            <button class="menu-btn" onclick="showSection('novo')">
+                <i class="fas fa-plus"></i> <span>Novo</span>
+            </button>
+            <button class="menu-btn" onclick="showSection('clientes')">
+                <i class="fas fa-users"></i> <span>Clientes</span>
+            </button>
+            <button class="menu-btn" onclick="showSection('config')">
+                <i class="fas fa-cog"></i> <span>Config</span>
+            </button>
+        </div>
+
+        <!-- Dashboard -->
+        <div id="dashboard" class="section active">
+            <div class="stats">
+                <div class="stat-box">
+                    <i class="fas fa-calendar-day"></i>
+                    <h3 id="stat-today">0</h3>
+                    <p>Hoje</p>
+                </div>
+                <div class="stat-box">
+                    <i class="fas fa-clock"></i>
+                    <h3 id="stat-pending">0</h3>
+                    <p>Pendentes</p>
+                </div>
+                <div class="stat-box">
+                    <i class="fas fa-check-circle"></i>
+                    <h3 id="stat-done">0</h3>
+                    <p>Feitos</p>
+                </div>
+                <div class="stat-box">
+                    <i class="fas fa-money-bill"></i>
+                    <h3 id="stat-money">R$0</h3>
+                    <p>Mês</p>
+                </div>
+            </div>
+
+            <div id="reminders-container"></div>
+
+            <div class="card">
+                <h2><i class="fas fa-calendar"></i> Próximos Serviços</h2>
+                <div id="upcoming-list">
+                    <div class="empty">
+                        <i class="fas fa-calendar"></i>
+                        <p>Nenhum serviço agendado</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Novo Agendamento -->
+        <div id="novo" class="section">
+            <div class="card">
+                <h2><i class="fas fa-user-plus"></i> Novo Agendamento</h2>
+                <form id="form-agendamento">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Nome *</label>
+                            <input type="text" id="nome" required placeholder="Nome do cliente">
+                        </div>
+                        <div class="form-group">
+                            <label>Telefone *</label>
+                            <input type="tel" id="telefone" required placeholder="(11) 99999-9999">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Endereço *</label>
+                        <input type="text" id="endereco" required placeholder="Rua, número, bairro">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Data *</label>
+                            <input type="date" id="data" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Hora *</label>
+                            <input type="time" id="hora" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Google Maps (opcional)</label>
+                        <input type="text" id="maps" placeholder="Cole o link do Google Maps">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Serviço</label>
+                            <select id="tipo">
+                                <option value="Sofá">Sofá</option>
+                                <option value="Colchão">Colchão</option>
+                                <option value="Cadeira">Cadeira</option>
+                                <option value="Tapete">Tapete</option>
+                                <option value="Carro">Carro</option>
+                                <option value="Outro">Outro</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Valor R$</label>
+                            <input type="number" id="valor" step="0.01" placeholder="0,00">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Observações</label>
+                        <textarea id="obs" rows="2" placeholder="Detalhes importantes..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn">
+                        <i class="fas fa-save"></i> Salvar Agendamento
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Clientes -->
+        <div id="clientes" class="section">
+            <div class="card">
+                <h2><i class="fas fa-users"></i> Clientes</h2>
+                <div class="form-group">
+                    <input type="text" id="busca" placeholder="Buscar cliente..." onkeyup="buscarClientes()">
+                </div>
+                <div id="lista-clientes"></div>
+            </div>
+        </div>
+
+        <!-- Config -->
+        <div id="config" class="section">
+            <div class="card">
+                <h2><i class="fas fa-database"></i> Backup</h2>
+                <button class="btn" onclick="exportarDados()">
+                    <i class="fas fa-download"></i> Exportar Dados
+                </button>
+                <div style="margin-top: 15px;">
+                    <label style="font-size: 14px; color: #555; font-weight: 600;">
+                        Restaurar Backup:
+                    </label>
+                    <input type="file" id="importar" accept=".json" onchange="importarDados(this)" style="margin-top: 5px; width: 100%;">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL CHECKLIST COM CÂMERA -->
+    <div id="modal-checklist" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-camera"></i> Fotos - Antes do Serviço</h2>
+                <button class="close-btn" onclick="fecharModal('modal-checklist')">&times;</button>
+            </div>
+
+            <!-- Preview da câmera em tempo real -->
+            <div class="camera-preview" id="cameraPreview">
+                <video id="video" autoplay playsinline></video>
+                <canvas id="canvas"></canvas>
+                <div class="camera-controls">
+                    <button class="btn btn-success" onclick="tirarFoto()">
+                        <i class="fas fa-camera"></i> Capturar
+                    </button>
+                    <button class="btn btn-secondary" onclick="pararCamera()">
+                        <i class="fas fa-times"></i> Cancelar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Botões de opção -->
+            <div class="camera-options" id="cameraOptions">
+                <button class="camera-btn" onclick="iniciarCamera()">
+                    <i class="fas fa-camera"></i>
+                    <span>Usar Câmera</span>
+                </button>
+                <button class="camera-btn" onclick="document.getElementById('input-file-antes').click()" style="background: linear-gradient(135deg, #666, #999);">
+                    <i class="fas fa-folder-open"></i>
+                    <span>Galeria/Arquivos</span>
+                </button>
+            </div>
+
+            <!-- Input escondido para arquivo -->
+            <input type="file" id="input-file-antes" class="file-input" accept="image/*" onchange="handleFileSelect(this, 'antes')">
+
+            <!-- Preview das fotos -->
+            <div class="photo-section">
+                <p style="color: #666; font-size: 14px; margin-bottom: 10px;">
+                    <i class="fas fa-images"></i> Fotos tiradas: <span id="contador-antes">0</span>
+                </p>
+                <div id="preview-antes" class="photo-preview"></div>
+            </div>
+
+            <button class="btn" onclick="iniciarServico()" style="margin-top: 20px;">
+                <i class="fas fa-play"></i> Iniciar Serviço
+            </button>
+        </div>
+    </div>
+
+    <!-- MODAL FINALIZAR COM CÂMERA -->
+    <div id="modal-finalizar" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-check-circle"></i> Finalizar Serviço</h2>
+                <button class="close-btn" onclick="fecharModal('modal-finalizar')">&times;</button>
+            </div>
+
+            <!-- Preview da câmera em tempo real -->
+            <div class="camera-preview" id="cameraPreviewDepois">
+                <video id="videoDepois" autoplay playsinline></video>
+                <canvas id="canvasDepois"></canvas>
+                <div class="camera-controls">
+                    <button class="btn btn-success" onclick="tirarFotoDepois()">
+                        <i class="fas fa-camera"></i> Capturar
+                    </button>
+                    <button class="btn btn-secondary" onclick="pararCameraDepois()">
+                        <i class="fas fa-times"></i> Cancelar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Botões de opção -->
+            <div class="camera-options" id="cameraOptionsDepois">
+                <button class="camera-btn" onclick="iniciarCameraDepois()">
+                    <i class="fas fa-camera"></i>
+                    <span>Usar Câmera</span>
+                </button>
+                <button class="camera-btn" onclick="document.getElementById('input-file-depois').click()" style="background: linear-gradient(135deg, #666, #999);">
+                    <i class="fas fa-folder-open"></i>
+                    <span>Galeria/Arquivos</span>
+                </button>
+            </div>
+
+            <input type="file" id="input-file-depois" class="file-input" accept="image/*" onchange="handleFileSelect(this, 'depois')">
+
+            <div class="photo-section">
+                <p style="color: #666; font-size: 14px; margin-bottom: 10px;">
+                    <i class="fas fa-images"></i> Fotos tiradas: <span id="contador-depois">0</span>
+                </p>
+                <div id="preview-depois" class="photo-preview"></div>
+            </div>
+
+            <h3 style="margin: 20px 0 10px; color: #555; font-size: 16px;">Pagamento</h3>
+            <div class="payment-options">
+                <div class="payment-option" onclick="selecionarPagamento(this, 'Dinheiro')">
+                    <i class="fas fa-money-bill-wave"></i>
+                    <span>Dinheiro</span>
+                </div>
+                <div class="payment-option" onclick="selecionarPagamento(this, 'PIX')">
+                    <i class="fas fa-qrcode"></i>
+                    <span>PIX</span>
+                </div>
+                <div class="payment-option" onclick="selecionarPagamento(this, 'Cartão')">
+                    <i class="fas fa-credit-card"></i>
+                    <span>Cartão</span>
+                </div>
+                <div class="payment-option" onclick="selecionarPagamento(this, 'Transferência')">
+                    <i class="fas fa-university"></i>
+                    <span>Transf.</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Valor Final R$</label>
+                <input type="number" id="valor-final" step="0.01" placeholder="0,00">
+            </div>
+
+            <h3 style="margin: 15px 0 10px; color: #555; font-size: 16px;">Assinatura do Cliente</h3>
+            <div class="signature-box">
+                <canvas id="signatureCanvas"></canvas>
+            </div>
+            <button type="button" class="btn btn-secondary" onclick="limparAssinatura()">
+                <i class="fas fa-eraser"></i> Limpar
+            </button>
+
+            <button class="btn btn-success" onclick="finalizarServico()" style="margin-top: 15px;">
+                <i class="fas fa-check"></i> Concluir Serviço
+            </button>
+        </div>
+    </div>
+
+    <!-- MODAL SUCESSO -->
+    <div id="modal-sucesso" class="modal">
+        <div class="modal-content" style="text-align: center;">
+            <div style="width: 80px; height: 80px; background: var(--success); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                <i class="fas fa-check" style="color: white; font-size: 40px;"></i>
+            </div>
+            <h2 style="color: var(--primary); margin-bottom: 10px;">Concluído!</h2>
+            <p style="color: #666; margin-bottom: 20px;">
+                Cliente será lembrado em 6 meses.
+            </p>
+            <button class="btn" onclick="fecharModal('modal-sucesso')">
+                <i class="fas fa-thumbs-up"></i> OK
+            </button>
+        </div>
+    </div>
+
+    <!-- TOAST -->
+    <div id="toast" class="toast"></div>
+
+    <script>
+        // ==========================================
+        // VARIÁVEIS GLOBAIS
+        // ==========================================
+        let clientes = [];
+        let clienteAtual = null;
+        let fotos = { antes: [], depois: [] };
+        let pagamentoSelecionado = null;
+        let stream = null;
+        let streamDepois = null;
+
+        // ==========================================
+        // INICIALIZAÇÃO
+        // ==========================================
+        document.addEventListener('DOMContentLoaded', function() {
+            carregarDados();
+            atualizarDashboard();
+            listarClientes();
+            initCanvas();
+            
+            const hoje = new Date().toISOString().split('T')[0];
+            document.getElementById('data').value = hoje;
+            document.getElementById('data').min = hoje;
+        });
+
+        function carregarDados() {
+            try {
+                const dados = localStorage.getItem('afclean_clientes');
+                if (dados) {
+                    clientes = JSON.parse(dados);
+                }
+            } catch (e) {
+                console.error('Erro ao carregar:', e);
+                clientes = [];
+            }
+        }
+
+        function salvarDados() {
+            try {
+                localStorage.setItem('afclean_clientes', JSON.stringify(clientes));
+            } catch (e) {
+                mostrarToast('Erro ao salvar!');
+            }
+        }
+
+        // ==========================================
+        // NAVEGAÇÃO
+        // ==========================================
+        function showSection(id) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
+            
+            document.getElementById(id).classList.add('active');
+            event.target.closest('.menu-btn').classList.add('active');
+            
+            if (id === 'dashboard') atualizarDashboard();
+            if (id === 'clientes') listarClientes();
+        }
+
+        // ==========================================
+        // NOVO AGENDAMENTO
+        // ==========================================
+        document.getElementById('form-agendamento').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const cliente = {
+                id: Date.now(),
+                nome: document.getElementById('nome').value.trim(),
+                telefone: document.getElementById('telefone').value.trim(),
+                endereco: document.getElementById('endereco').value.trim(),
+                data: document.getElementById('data').value,
+                hora: document.getElementById('hora').value,
+                maps: document.getElementById('maps').value.trim(),
+                tipo: document.getElementById('tipo').value,
+                valor: parseFloat(document.getElementById('valor').value) || 0,
+                obs: document.getElementById('obs').value.trim(),
+                status: 'pendente',
+                fotosAntes: [],
+                fotosDepois: [],
+                pagamento: null,
+                assinatura: null,
+                criado: new Date().toISOString()
+            };
+            
+            clientes.push(cliente);
+            salvarDados();
+            
+            mostrarToast('✅ Agendamento salvo!');
+            this.reset();
+            document.getElementById('data').value = new Date().toISOString().split('T')[0];
+            
+            showSection('clientes');
+            listarClientes();
+        });
+
+        // ==========================================
+        // CÂMERA - FUNÇÕES CORRIGIDAS
+        // ==========================================
+        
+        // ABRIR CHECKLIST
+        function abrirChecklist(id) {
+            clienteAtual = id;
+            fotos.antes = [];
+            atualizarPreview('antes');
+            document.getElementById('contador-antes').textContent = '0';
+            document.getElementById('modal-checklist').classList.add('active');
+        }
+
+        // ABRIR FINALIZAR
+        function abrirFinalizar(id) {
+            clienteAtual = id;
+            fotos.depois = [];
+            pagamentoSelecionado = null;
+            atualizarPreview('depois');
+            document.getElementById('contador-depois').textContent = '0';
+            document.querySelectorAll('.payment-option').forEach(p => p.classList.remove('selected'));
+            document.getElementById('valor-final').value = '';
+            limparAssinatura();
+            
+            const cliente = clientes.find(c => c.id === id);
+            if (cliente && cliente.valor) {
+                document.getElementById('valor-final').value = cliente.valor;
+            }
+            
+            document.getElementById('modal-finalizar').classList.add('active');
+        }
+
+        // INICIAR CÂMERA - ANTES
+        async function iniciarCamera() {
+            try {
+                const constraints = {
+                    video: {
+                        facingMode: 'environment', // Câmera traseira no celular
+                        width: { ideal: 1280 },
+                        height: { ideal: 720 }
+                    },
+                    audio: false
+                };
+
+                stream = await navigator.mediaDevices.getUserMedia(constraints);
+                const video = document.getElementById('video');
+                video.srcObject = stream;
+                
+                document.getElementById('cameraOptions').style.display = 'none';
+                document.getElementById('cameraPreview').style.display = 'block';
+                
+            } catch (err) {
+                console.error('Erro câmera:', err);
+                alert('Não foi possível acessar a câmera. Use a opção "Galeria/Arquivos".');
+            }
+        }
+
+        // TIRAR FOTO - ANTES
+        function tirarFoto() {
+            const video = document.getElementById('video');
+            const canvas = document.getElementById('canvas');
+            const context = canvas.getContext('2d');
+            
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            context.drawImage(video, 0, 0);
+            
+            const foto = canvas.toDataURL('image/jpeg', 0.8);
+            fotos.antes.push(foto);
+            
+            atualizarPreview('antes');
+            document.getElementById('contador-antes').textContent = fotos.antes.length;
+            
+            pararCamera();
+            mostrarToast('Foto capturada!');
+        }
+
+        // PARAR CÂMERA - ANTES
+        function pararCamera() {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+                stream = null;
+            }
+            document.getElementById('cameraPreview').style.display = 'none';
+            document.getElementById('cameraOptions').style.display = 'grid';
+        }
+
+        // INICIAR CÂMERA - DEPOIS
+        async function iniciarCameraDepois() {
+            try {
+                const constraints = {
+                    video: {
+                        facingMode: 'environment',
+                        width: { ideal: 1280 },
+                        height: { ideal: 720 }
+                    },
+                    audio: false
+                };
+
+                streamDepois = await navigator.mediaDevices.getUserMedia(constraints);
+                const video = document.getElementById('videoDepois');
+                video.srcObject = streamDepois;
+                
+                document.getElementById('cameraOptionsDepois').style.display = 'none';
+                document.getElementById('cameraPreviewDepois').style.display = 'block';
+                
+            } catch (err) {
+                console.error('Erro câmera:', err);
+                alert('Não foi possível acessar a câmera. Use a opção "Galeria/Arquivos".');
+            }
+        }
+
+        // TIRAR FOTO - DEPOIS
+        function tirarFotoDepois() {
+            const video = document.getElementById('videoDepois');
+            const canvas = document.getElementById('canvasDepois');
+            const context = canvas.getContext('2d');
+            
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            context.drawImage(video, 0, 0);
+            
+            const foto = canvas.toDataURL('image/jpeg', 0.8);
+            fotos.depois.push(foto);
+            
+            atualizarPreview('depois');
+            document.getElementById('contador-depois').textContent = fotos.depois.length;
+            
+            pararCameraDepois();
+            mostrarToast('Foto capturada!');
+        }
+
+        // PARAR CÂMERA - DEPOIS
+        function pararCameraDepois() {
+            if (streamDepois) {
+                streamDepois.getTracks().forEach(track => track.stop());
+                streamDepois = null;
+            }
+            document.getElementById('cameraPreviewDepois').style.display = 'none';
+            document.getElementById('cameraOptionsDepois').style.display = 'grid';
+        }
+
+        // SELECIONAR ARQUIVO DA GALERIA
+        function handleFileSelect(input, tipo) {
+            const files = Array.from(input.files);
+            
+            files.forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    fotos[tipo].push(e.target.result);
+                    atualizarPreview(tipo);
+                    document.getElementById('contador-' + tipo).textContent = fotos[tipo].length;
+                };
+                reader.readAsDataURL(file);
+            });
+            
+            input.value = '';
+        }
+
+        // ATUALIZAR PREVIEW DAS FOTOS
+        function atualizarPreview(tipo) {
+            const div = document.getElementById('preview-' + tipo);
+            div.innerHTML = fotos[tipo].map((foto, index) => `
+                <div class="photo-item">
+                    <img src="${foto}" onclick="verFoto('${foto}')">
+                    <button class="remove-btn" onclick="removerFoto('${tipo}', ${index})">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        // REMOVER FOTO
+        function removerFoto(tipo, index) {
+            fotos[tipo].splice(index, 1);
+            atualizarPreview(tipo);
+            document.getElementById('contador-' + tipo).textContent = fotos[tipo].length;
+        }
+
+        // VER FOTO EM TAMANHO MAIOR
+        function verFoto(src) {
+            const div = document.createElement('div');
+            div.className = 'modal active';
+            div.style.background = 'rgba(0,0,0,0.9)';
+            div.innerHTML = `
+                <div style="text-align: center; padding: 20px;">
+                    <img src="${src}" style="max-width: 100%; max-height: 80vh; border-radius: 10px;">
+                    <br>
+                    <button class="btn btn-secondary" onclick="this.closest('.modal').remove()" style="margin-top: 20px;">
+                        <i class="fas fa-times"></i> Fechar
+                    </button>
+                </div>
+            `;
+            div.onclick = function(e) {
+                if (e.target === div) div.remove();
+            };
+            document.body.appendChild(div);
+        }
+
+        // ==========================================
+        // SERVIÇO
+        // ==========================================
+        function iniciarServico() {
+            if (fotos.antes.length === 0) {
+                alert('Tire pelo menos uma foto antes de iniciar!');
+                return;
+            }
+            
+            const cliente = clientes.find(c => c.id === clienteAtual);
+            cliente.status = 'andamento';
+            cliente.fotosAntes = fotos.antes;
+            salvarDados();
+            
+            fecharModal('modal-checklist');
+            pararCamera();
+            listarClientes();
+            mostrarToast('Serviço iniciado!');
+        }
+
+        function selecionarPagamento(el, tipo) {
+            document.querySelectorAll('.payment-option').forEach(p => p.classList.remove('selected'));
+            el.classList.add('selected');
+            pagamentoSelecionado = tipo;
+        }
+
+        // ==========================================
+        // ASSINATURA
+        // ==========================================
+        let canvas, ctx, desenhando = false;
+
+        function initCanvas() {
+            canvas = document.getElementById('signatureCanvas');
+            if (!canvas) return;
+            
+            // Ajustar tamanho
+            const resize = () => {
+                const rect = canvas.parentElement.getBoundingClientRect();
+                canvas.width = rect.width;
+                canvas.height = 200;
+                ctx = canvas.getContext('2d');
+                ctx.strokeStyle = '#000';
+                ctx.lineWidth = 2;
+                ctx.lineCap = 'round';
+            };
+            
+            resize();
+            window.addEventListener('resize', resize);
+            
+            // Mouse
+            canvas.addEventListener('mousedown', startDraw);
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('mouseup', stopDraw);
+            canvas.addEventListener('mouseout', stopDraw);
+            
+            // Touch
+            canvas.addEventListener('touchstart', handleTouch, {passive: false});
+            canvas.addEventListener('touchmove', handleTouch, {passive: false});
+            canvas.addEventListener('touchend', stopDraw);
+        }
+
+        function getPos(e) {
+            const rect = canvas.getBoundingClientRect();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            return {
+                x: clientX - rect.left,
+                y: clientY - rect.top
+            };
+        }
+
+        function startDraw(e) {
+            desenhando = true;
+            const pos = getPos(e);
+            ctx.beginPath();
+            ctx.moveTo(pos.x, pos.y);
+        }
+
+        function draw(e) {
+            if (!desenhando) return;
+            const pos = getPos(e);
+            ctx.lineTo(pos.x, pos.y);
+            ctx.stroke();
+        }
+
+        function stopDraw() {
+            desenhando = false;
+        }
+
+        function handleTouch(e) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const mouseEvent = new MouseEvent(e.type === 'touchstart' ? 'mousedown' : 'mousemove', {
+                clientX: touch.clientX,
+                clientY: touch.clientY
+            });
+            canvas.dispatchEvent(mouseEvent);
+        }
+
+        function limparAssinatura() {
+            if (!ctx) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        // ==========================================
+        // FINALIZAR
+        // ==========================================
+        function finalizarServico() {
+            if (fotos.depois.length === 0) {
+                alert('Tire pelo menos uma foto do resultado!');
+                return;
+            }
+            if (!pagamentoSelecionado) {
+                alert('Selecione a forma de pagamento!');
+                return;
+            }
+            
+            const cliente = clientes.find(c => c.id === clienteAtual);
+            cliente.status = 'concluido';
+            cliente.fotosDepois = fotos.depois;
+            cliente.pagamento = pagamentoSelecionado;
+            cliente.valorFinal = parseFloat(document.getElementById('valor-final').value) || cliente.valor || 0;
+            cliente.assinatura = canvas.toDataURL();
+            cliente.concluidoEm = new Date().toISOString();
+            
+            // Próximo contato em 6 meses
+            const proximo = new Date();
+            proximo.setMonth(proximo.getMonth() + 6);
+            cliente.proximoContato = proximo.toISOString();
+            
+            salvarDados();
+            
+            fecharModal('modal-finalizar');
+            pararCameraDepois();
+            document.getElementById('modal-sucesso').classList.add('active');
+            listarClientes();
+            atualizarDashboard();
+        }
+
+        // ==========================================
+        // DASHBOARD E LISTAS
+        // ==========================================
+        function atualizarDashboard() {
+            const hoje = new Date().toISOString().split('T')[0];
+            const hojeMes = new Date().getMonth();
+            const hojeAno = new Date().getFullYear();
+            
+            const servicosHoje = clientes.filter(c => c.data === hoje);
+            const pendentes = clientes.filter(c => c.status === 'pendente');
+            const concluidos = clientes.filter(c => c.status === 'concluido');
+            
+            const receitaMes = clientes
+                .filter(c => {
+                    if (c.status !== 'concluido' || !c.concluidoEm) return false;
+                    const data = new Date(c.concluidoEm);
+                    return data.getMonth() === hojeMes && data.getFullYear() === hojeAno;
+                })
+                .reduce((soma, c) => soma + (c.valorFinal || c.valor || 0), 0);
+            
+            document.getElementById('stat-today').textContent = servicosHoje.length;
+            document.getElementById('stat-pending').textContent = pendentes.length;
+            document.getElementById('stat-done').textContent = concluidos.length;
+            document.getElementById('stat-money').textContent = 'R$' + receitaMes.toFixed(0);
+            
+            // Lembretes
+            const agora = new Date();
+            const lembretes = clientes.filter(c => {
+                if (c.status !== 'concluido' || !c.proximoContato) return false;
+                return new Date(c.proximoContato) <= agora;
+            });
+            
+            const divLembretes = document.getElementById('reminders-container');
+            if (lembretes.length > 0) {
+                divLembretes.innerHTML = lembretes.map(c => `
+                    <div class="reminder-alert">
+                        <i class="fas fa-bell"></i>
+                        <div style="flex: 1;">
+                            <strong>${c.nome}</strong> - Retorno de 6 meses<br>
+                            <small>${c.telefone}</small>
+                        </div>
+                        <a href="https://wa.me/55${c.telefone.replace(/\D/g,'')}?text=Olá ${c.nome}, aqui é da AF Clean. Já se passaram 6 meses da higienização. Gostaria de agendar a manutenção?" 
+                           class="whatsapp-btn" target="_blank">
+                            <i class="fab fa-whatsapp"></i> Chamar
+                        </a>
+                    </div>
+                `).join('');
+            } else {
+                divLembretes.innerHTML = '';
+            }
+            
+            // Próximos
+            const proximos = clientes
+                .filter(c => c.status !== 'concluido' && c.data >= hoje)
+                .sort((a, b) => new Date(a.data + ' ' + a.hora) - new Date(b.data + ' ' + b.hora))
+                .slice(0, 5);
+            
+            const divProximos = document.getElementById('upcoming-list');
+            if (proximos.length === 0) {
+                divProximos.innerHTML = `
+                    <div class="empty">
+                        <i class="fas fa-calendar"></i>
+                        <p>Nenhum serviço agendado</p>
+                    </div>
+                `;
+            } else {
+                divProximos.innerHTML = proximos.map(c => `
+                    <div class="client-item" style="cursor: pointer;" onclick="verDetalhes(${c.id})">
+                        <h3>${c.nome}</h3>
+                        <p><i class="fas fa-calendar"></i> ${formatarData(c.data)} às ${c.hora}</p>
+                        <p><i class="fas fa-couch"></i> ${c.tipo}</p>
+                        <span class="badge badge-${c.status}">${c.status === 'pendente' ? 'Pendente' : 'Em Andamento'}</span>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function listarClientes() {
+            const div = document.getElementById('lista-clientes');
+            
+            if (clientes.length === 0) {
+                div.innerHTML = `
+                    <div class="empty">
+                        <i class="fas fa-users"></i>
+                        <p>Nenhum cliente cadastrado</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            const ordenados = [...clientes].sort((a, b) => new Date(a.data) - new Date(b.data));
+            
+            div.innerHTML = ordenados.map(c => {
+                let acoes = '';
+                if (c.status === 'pendente') {
+                    acoes = `<button class="btn btn-small" onclick="event.stopPropagation(); abrirChecklist(${c.id})"><i class="fas fa-play"></i> Iniciar</button>`;
+                } else if (c.status === 'andamento') {
+                    acoes = `<button class="btn btn-success btn-small" onclick="event.stopPropagation(); abrirFinalizar(${c.id})"><i class="fas fa-check"></i> Finalizar</button>`;
+                } else {
+                    acoes = `<button class="btn btn-secondary btn-small" onclick="event.stopPropagation(); verDetalhes(${c.id})"><i class="fas fa-eye"></i> Ver</button>`;
+                }
+                
+                return `
+                    <div class="client-item" onclick="verDetalhes(${c.id})">
+                        <h3>${c.nome}</h3>
+                        <p><i class="fas fa-phone"></i> ${c.telefone}</p>
+                        <p><i class="fas fa-map-marker-alt"></i> ${c.endereco}</p>
+                        <p><i class="fas fa-calendar"></i> ${formatarData(c.data)} às ${c.hora} | ${c.tipo}</p>
+                        <div class="client-actions">
+                            ${acoes}
+                            <button class="btn btn-danger btn-small" onclick="event.stopPropagation(); excluirCliente(${c.id})"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function buscarClientes() {
+            const termo = document.getElementById('busca').value.toLowerCase();
+            const itens = document.querySelectorAll('.client-item');
+            
+            itens.forEach(item => {
+                const texto = item.textContent.toLowerCase();
+                item.style.display = texto.includes(termo) ? 'block' : 'none';
+            });
+        }
+
+        function excluirCliente(id) {
+            if (!confirm('Tem certeza que deseja excluir?')) return;
+            
+            clientes = clientes.filter(c => c.id !== id);
+            salvarDados();
+            listarClientes();
+            atualizarDashboard();
+            mostrarToast('Cliente excluído');
+        }
+
+        function verDetalhes(id) {
+            const c = clientes.find(cliente => cliente.id === id);
+            if (!c) return;
+            
+            let fotosAntes = c.fotosAntes ? c.fotosAntes.map(f => `<img src="${f}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px; margin: 5px; cursor: pointer;" onclick="verFoto('${f}')">`).join('') : '';
+            let fotosDepois = c.fotosDepois ? c.fotosDepois.map(f => `<img src="${f}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px; margin: 5px; cursor: pointer;" onclick="verFoto('${f}')">`).join('') : '';
+            let assinatura = c.assinatura ? `<img src="${c.assinatura}" style="max-width: 100%; border: 1px solid #ddd; border-radius: 8px;">` : '';
+            
+            const div = document.createElement('div');
+            div.className = 'modal active';
+            div.innerHTML = `
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2><i class="fas fa-user"></i> ${c.nome}</h2>
+                        <button class="close-btn" onclick="this.closest('.modal').remove()">&times;</button>
+                    </div>
+                    <p><strong>Telefone:</strong> <a href="tel:${c.telefone}">${c.telefone}</a></p>
+                    <p><strong>Endereço:</strong> ${c.endereco}</p>
+                    <p><strong>Data:</strong> ${formatarData(c.data)} às ${c.hora}</p>
+                    <p><strong>Serviço:</strong> ${c.tipo}</p>
+                    <p><strong>Valor:</strong> R$ ${(c.valorFinal || c.valor || 0).toFixed(2)}</p>
+                    <p><strong>Pagamento:</strong> ${c.pagamento || '-'}</p>
+                    <p><strong>Status:</strong> ${c.status === 'concluido' ? 'Concluído' : c.status === 'andamento' ? 'Em Andamento' : 'Pendente'}</p>
+                    ${c.obs ? `<p><strong>Obs:</strong> ${c.obs}</p>` : ''}
+                    ${c.maps ? `<p><a href="${c.maps}" target="_blank" class="btn btn-small" style="margin-top: 10px;"><i class="fas fa-map-marker-alt"></i> Maps</a></p>` : ''}
+                    
+                    ${fotosAntes ? `<h3 style="margin-top: 15px;">Antes:</h3><div style="display: flex; flex-wrap: wrap;">${fotosAntes}</div>` : ''}
+                    ${fotosDepois ? `<h3 style="margin-top: 15px;">Depois:</h3><div style="display: flex; flex-wrap: wrap;">${fotosDepois}</div>` : ''}
+                    ${assinatura ? `<h3 style="margin-top: 15px;">Assinatura:</h3>${assinatura}` : ''}
+                    
+                    <a href="https://wa.me/55${c.telefone.replace(/\D/g,'')}" target="_blank" class="btn btn-success" style="margin-top: 15px;">
+                        <i class="fab fa-whatsapp"></i> WhatsApp
+                    </a>
+                </div>
+            `;
+            document.body.appendChild(div);
+        }
+
+        // ==========================================
+        // BACKUP
+        // ==========================================
+        function exportarDados() {
+            const dados = JSON.stringify(clientes, null, 2);
+            const blob = new Blob([dados], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'afclean-backup-' + new Date().toISOString().split('T')[0] + '.json';
+            a.click();
+            URL.revokeObjectURL(url);
+            mostrarToast('Backup baixado!');
+        }
+
+        function importarDados(input) {
+            const file = input.files[0];
+            if (!file) return;
+            
+            if (!confirm('Isso substituirá todos os dados. Continuar?')) {
+                input.value = '';
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const dados = JSON.parse(e.target.result);
+                    if (Array.isArray(dados)) {
+                        clientes = dados;
+                        salvarDados();
+                        listarClientes();
+                        atualizarDashboard();
+                        mostrarToast('Dados restaurados!');
+                    } else {
+                        alert('Arquivo inválido!');
+                    }
+                } catch (err) {
+                    alert('Erro ao ler arquivo!');
+                }
+                input.value = '';
+            };
+            reader.readAsText(file);
+        }
+
+        // ==========================================
+        // UTILITÁRIOS
+        // ==========================================
+        function fecharModal(id) {
+            document.getElementById(id).classList.remove('active');
+            // Parar câmeras se estiverem rodando
+            if (id === 'modal-checklist') pararCamera();
+            if (id === 'modal-finalizar') pararCameraDepois();
+        }
+
+        function formatarData(dataStr) {
+            if (!dataStr) return '-';
+            const [ano, mes, dia] = dataStr.split('-');
+            return `${dia}/${mes}/${ano}`;
+        }
+
+        function mostrarToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // Fechar modal ao clicar fora
+        window.onclick = function(e) {
+            if (e.target.classList.contains('modal')) {
+                fecharModal(e.target.id);
+            }
+        }
+    </script>
+</body>
+</html>
